@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frederico Galvão | Especialista em IA Aplicada aos Negócios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090d12;
+    --bg2: #0e1520;
+    --bg3: #141d2b;
+    --surface: #192233;
+    --border: #1e2d42;
+    --border2: #2a3f5c;
+    --accent: #00c8ff;
+    --accent2: #00ff9d;
+    --accent3: #ff6b35;
+    --text: #e8edf5;
+    --text2: #8ca0b8;
+    --text3: #4d6480;
+    --gold: #c9a84c;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.15s ease, border-color 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,200,255,0.3);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.4s ease, width 0.3s, height 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* GRID BACKGROUND */
+  .grid-bg {
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 20px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(30,45,66,0.5);
+    backdrop-filter: blur(20px);
+    background: rgba(9,13,18,0.8);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 18px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-badge {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid rgba(0,255,157,0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,200,255,0.07) 0%, transparent 70%);
+    right: -100px; top: 50%;
+    transform: translateY(-50%);
+    animation: pulse-orb 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .hero-orb2 {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,255,157,0.05) 0%, transparent 70%);
+    left: 10%; bottom: 10%;
+    animation: pulse-orb 8s ease-in-out infinite reverse;
+    pointer-events: none;
+  }
+
+  @keyframes pulse-orb {
+    0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.7; }
+    50% { transform: translateY(-50%) scale(1.1); opacity: 1; }
+  }
+
+  .hero-left { position: relative; z-index: 1; }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(52px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 12px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  .hero-name .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 22px;
+    color: var(--accent);
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-desc {
+    color: var(--text2);
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 14px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    text-decoration: none;
+    border: none; cursor: none;
+    transition: all 0.25s ease;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .btn-primary:hover { background: #33d4ff; transform: translateY(-2px); }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent;
+    color: var(--text2);
+    padding: 14px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 400;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border2);
+    cursor: none;
+    transition: all 0.25s ease;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HERO RIGHT - visual */
+  .hero-right {
+    display: flex; justify-content: center; align-items: center;
+    position: relative; z-index: 1;
+    animation: fadeIn 1.2s ease 0.5s both;
+  }
+
+  .orbit-container {
+    position: relative; width: 420px; height: 420px;
+  }
+
+  .orbit-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px; height: 120px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px;
+    z-index: 3;
+    box-shadow: 0 0 40px rgba(0,200,255,0.15), inset 0 0 20px rgba(0,200,255,0.05);
+  }
+  .orbit-center-label {
+    font-size: 9px; letter-spacing: 1.5px;
+    color: var(--text3); text-transform: uppercase;
+  }
+  .orbit-center-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .orbit-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px dashed rgba(0,200,255,0.15);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .ring1 { width: 200px; height: 200px; animation: spin 20s linear infinite; }
+  .ring2 { width: 310px; height: 310px; animation: spin 35s linear infinite reverse; border-color: rgba(0,255,157,0.1); }
+  .ring3 { width: 420px; height: 420px; animation: spin 50s linear infinite; border-color: rgba(255,107,53,0.08); }
+
+  @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  .orbit-dot {
+    position: absolute; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    top: 50%; left: 50%;
+  }
+  .ring1 .orbit-dot { margin-top: -4px; margin-left: -4px; transform: translate(95px, 0); }
+
+  .orbit-node {
+    position: absolute; width: 80px; height: 80px;
+    border: 1px solid var(--border2);
+    background: var(--bg2);
+    border-radius: 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text3);
+    transition: border-color 0.3s, color 0.3s;
+    cursor: default;
+  }
+  .orbit-node:hover { border-color: var(--accent); color: var(--accent); }
+  .orbit-node svg { width: 22px; height: 22px; margin-bottom: 2px; }
+
+  .node1 { top: 10px; left: 50%; transform: translateX(-50%); }
+  .node2 { top: 50%; right: 5px; transform: translateY(-50%); }
+  .node3 { bottom: 10px; left: 50%; transform: translateX(-50%); }
+  .node4 { top: 50%; left: 5px; transform: translateY(-50%); }
+
+  /* STATS BAR */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex; justify-content: space-around;
+    position: relative; z-index: 1;
+    background: rgba(14,21,32,0.5);
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px; font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat-label {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text3); margin-top: 4px;
+  }
+  .stat-divider {
+    width: 1px; background: var(--border);
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 48px;
+    position: relative; z-index: 1;
+  }
+
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 16px;
+  }
+  .section-tag::before {
+    content: '//'; color: var(--text3); font-size: 12px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 64px;
+    line-height: 1;
+  }
+
+  /* SOBRE */
+  #sobre {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .sobre-text p {
+    color: var(--text2);
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .sobre-text p strong { color: var(--text); font-weight: 500; }
+
+  .highlight-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--accent);
+    padding: 24px 28px;
+    margin-top: 32px;
+    font-size: 13px;
+    color: var(--text2);
+    font-style: italic;
+  }
+
+  .sobre-sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+  .info-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  .info-card:hover { border-color: var(--border2); }
+  .info-card-label {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 8px;
+  }
+  .info-card-value {
+    font-size: 14px; color: var(--text);
+  }
+  .info-card-value.accent { color: var(--accent); }
+
+  /* COMPETÊNCIAS */
+  #competencias { background: var(--bg); }
+
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .comp-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .comp-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .comp-card:hover::before { transform: scaleX(1); }
+  .comp-card:hover { background: var(--bg3); }
+
+  .comp-icon {
+    width: 44px; height: 44px;
+    margin-bottom: 20px;
+    color: var(--accent);
+  }
+  .comp-card:nth-child(2) .comp-icon { color: var(--accent2); }
+  .comp-card:nth-child(3) .comp-icon { color: var(--accent3); }
+  .comp-card:nth-child(4) .comp-icon { color: var(--gold); }
+  .comp-card:nth-child(5) .comp-icon { color: #b06bff; }
+  .comp-card:nth-child(6) .comp-icon { color: var(--accent); }
+
+  .comp-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  .comp-desc { color: var(--text2); font-size: 13px; line-height: 1.7; }
+
+  .comp-tags {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px;
+  }
+  .comp-tag {
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text3); border: 1px solid var(--border);
+    padding: 3px 8px;
+  }
+
+  /* EXPERIÊNCIA */
+  #experiencia {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline {
+    position: relative;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px; background: var(--border2);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    padding: 0 0 56px 40px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute; left: -5px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    border: 2px solid var(--bg2);
+  }
+  .timeline-item:nth-child(2)::before { background: var(--accent2); box-shadow: 0 0 12px var(--accent2); }
+  .timeline-item:nth-child(3)::before { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+
+  .timeline-period {
+    font-size: 11px; letter-spacing: 1px;
+    color: var(--text3); padding-top: 4px;
+  }
+  .timeline-period strong {
+    display: block;
+    font-family: 'Syne', sans-serif; font-size: 14px;
+    color: var(--text2); letter-spacing: 0;
+    font-weight: 600; margin-bottom: 4px;
+  }
+
+  .timeline-content {}
+  .timeline-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700;
+    letter-spacing: -0.5px; margin-bottom: 4px;
+  }
+  .timeline-company {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  .timeline-desc {
+    color: var(--text2); font-size: 13px; line-height: 1.8;
+  }
+
+  .timeline-achievements {
+    margin-top: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .achievement {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--text2);
+  }
+  .achievement::before {
+    content: '→';
+    color: var(--accent); flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* TRANSIÇÃO */
+  #transicao {
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .transition-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .transition-visual {
+    position: relative; height: 400px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .bridge {
+    width: 100%; position: relative;
+  }
+
+  .bridge-lane {
+    display: flex; align-items: center;
+    gap: 0; margin-bottom: 20px;
+    position: relative;
+  }
+
+  .bridge-node {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    padding: 12px 20px;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text2); white-space: nowrap;
+    border-radius: 3px;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .bridge-node.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 16px rgba(0,200,255,0.2);
+  }
+  .bridge-node.target {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    box-shadow: 0 0 16px rgba(0,255,157,0.2);
+  }
+
+  .bridge-arrow {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border2), var(--accent));
+    position: relative;
+  }
+  .bridge-arrow::after {
+    content: '▶';
+    position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent); font-size: 8px;
+  }
+
+  .transition-content {}
+  .transition-content .section-tag { margin-bottom: 16px; }
+  .transition-content .section-title { margin-bottom: 24px; }
+  .transition-content p {
+    color: var(--text2); font-size: 14px; line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .ai-skills {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 32px;
+  }
+  .ai-skill-tag {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    transition: all 0.3s;
+    background: var(--bg2);
+  }
+  .ai-skill-tag:hover, .ai-skill-tag.highlight {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(0,255,157,0.05);
+  }
+
+  /* FORMAÇÃO */
+  #formacao {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .edu-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .edu-card:hover { border-color: var(--border2); }
+  .edu-card::after {
+    content: attr(data-index);
+    position: absolute;
+    right: 24px; top: 24px;
+    font-family: 'Syne', sans-serif;
+    font-size: 60px; font-weight: 800;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+  }
+
+  .edu-badge {
+    display: inline-block;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 3px 10px; margin-bottom: 16px;
+    border-radius: 2px;
+  }
+  .edu-degree {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700;
+    letter-spacing: -0.5px; margin-bottom: 8px;
+  }
+  .edu-institution {
+    font-size: 12px; letter-spacing: 1px;
+    color: var(--text3); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .edu-desc { color: var(--text2); font-size: 13px; line-height: 1.7; }
+
+  /* CONTATO */
+  #contato {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .contact-inner { max-width: 640px; margin: 0 auto; }
+  .contact-inner .section-title { margin-bottom: 16px; }
+  .contact-sub {
+    color: var(--text2); font-size: 15px;
+    margin-bottom: 48px; line-height: 1.8;
+  }
+
+  .contact-grid {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    justify-content: center; margin-bottom: 48px;
+  }
+
+  .contact-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    text-decoration: none;
+    color: var(--text2);
+    font-size: 13px;
+    transition: all 0.3s;
+  }
+  .contact-card:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,200,255,0.1);
+  }
+  .contact-card svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .availability {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent2);
+  }
+  .availability::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 8px var(--accent2);
+    animation: blink 2s ease infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 1;
+    background: rgba(9,13,18,0.9);
+  }
+  .footer-copy {
+    font-size: 11px; color: var(--text3);
+    letter-spacing: 0.5px;
+  }
+  .footer-copy span { color: var(--text2); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text3); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .hero-right { display: none; }
+    section { padding: 60px 24px; }
+    .sobre-grid, .transition-inner { grid-template-columns: 1fr; gap: 48px; }
+    .comp-grid { grid-template-columns: 1fr; }
+    .edu-grid { grid-template-columns: 1fr; }
+    .timeline-item { grid-template-columns: 1fr; gap: 8px; padding-left: 28px; }
+    .stats-bar { padding: 24px; flex-wrap: wrap; gap: 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">FG<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#competencias">Competências</a></li>
+    <li><a href="#experiencia">Experiência</a></li>
+    <li><a href="#transicao">Transição</a></li>
+    <li><a href="#formacao">Formação</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <div class="nav-badge">Aberto a oportunidades</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-orb2"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Especialista em IA Aplicada aos Negócios</div>
+    <h1 class="hero-name">
+      Frederico<br>
+      <span class="line2">Galvão</span>
+    </h1>
+    <div class="hero-title">Engenheiro Químico → AI Business Specialist</div>
+    <p class="hero-desc">
+      Mais de 20 anos transformando processos industriais complexos em eficiência mensurável. Agora, aplicando inteligência artificial para levar essa transformação a um novo patamar.
+    </p>
+    <div class="hero-ctas">
+      <a href="#transicao" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Minha Jornada de Transição
+      </a>
+      <a href="#contato" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2-2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Contato
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="orbit-container">
+      <div class="orbit-ring ring1"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring ring2"></div>
+      <div class="orbit-ring ring3"></div>
+
+      <div class="orbit-center">
+        <div class="orbit-center-label">Anos de</div>
+        <div class="orbit-center-num">20+</div>
+        <div class="orbit-center-label">Experiência</div>
+      </div>
+
+      <div class="orbit-node node1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+        <span>IA</span>
+      </div>
+      <div class="orbit-node node2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+        </svg>
+        <span>Química</span>
+      </div>
+      <div class="orbit-node node3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Dados</span>
+      </div>
+      <div class="orbit-node node4">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>PCP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">20+</div>
+    <div class="stat-label">Anos de Experiência</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">3+</div>
+    <div class="stat-label">Sistemas Implementados</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">MBA</div>
+    <div class="stat-label">Gestão Empresarial</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Foco em Resultados</div>
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-tag">Sobre mim</div>
+  <div class="section-title">Uma trajetória de<br>transformação</div>
+
+  <div class="sobre-grid">
+    <div class="sobre-text">
+      <p>
+        Com mais de <strong>20 anos de experiência na indústria química</strong>, desenvolvi uma visão sistêmica rara: entendo processos produtivos de dentro para fora, sei onde estão os gargalos e como atacá-los com tecnologia.
+      </p>
+      <p>
+        Ao longo da carreira, atuei desde a operação de produção até o planejamento estratégico, sempre na interseção entre <strong>processos industriais, sistemas de informação e pessoas</strong>. Essa capacidade de transitar entre mundos distintos é meu maior diferencial.
+      </p>
+      <p>
+        Hoje, canalizando essa experiência para um novo propósito: <strong>aplicar Inteligência Artificial ao mundo dos negócios</strong>, traduzindo a linguagem da tecnologia para a linguagem da operação e dos resultados.
+      </p>
+      <div class="highlight-box">
+        "Não sou apenas mais um profissional de IA. Sou alguém que já viveu os problemas que a IA pode resolver — e sabe exatamente onde ela gera valor real."
+      </div>
+    </div>
+
+    <div class="sobre-sidebar">
+      <div class="info-card">
+        <div class="info-card-label">Localização</div>
+        <div class="info-card-value">Santos, SP — Brasil</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Área de atuação</div>
+        <div class="info-card-value accent">IA Aplicada aos Negócios</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Setor de origem</div>
+        <div class="info-card-value">Indústria Química (Cloro-Soda)</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Disponibilidade</div>
+        <div class="info-card-value accent">Aberto a novas oportunidades</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Modelo de trabalho</div>
+        <div class="info-card-value">Presencial / Híbrido / Remoto</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETÊNCIAS -->
+<section id="competencias">
+  <div class="section-tag">Competências</div>
+  <div class="section-title">O que eu domino</div>
+
+  <div class="comp-grid reveal">
+    <div class="comp-card">
+      <svg class="comp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+      </svg>
+      <div class="comp-title">Planejamento e Controle de Produção</div>
+      <div class="comp-desc">Gestão integrada de matérias-primas, insumos e subprodutos com foco em previsibilidade e continuidade operacional.</div>
+      <div class="comp-tags">
+        <span class="comp-tag">PCP</span>
+        <span class="comp-tag">Supply Chain</span>
+        <span class="comp-tag">Gestão de Estoques</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <svg class="comp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+      <div class="comp-title">Implementação de Sistemas</div>
+      <div class="comp-desc">Experiência prática na implementação do Aspen One, integrando dados e ampliando a visibilidade operacional em toda a planta.</div>
+      <div class="comp-tags">
+        <span class="comp-tag">Aspen One</span>
+        <span class="comp-tag">ERP</span>
+        <span class="comp-tag">Integração de Dados</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <svg class="comp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      <div class="comp-title">Monitoramento e Visualização</div>
+      <div class="comp-desc">Desenvolvimento de telas gráficas para monitoramento da Planta de Cloro-Soda, habilitando decisões em tempo real.</div>
+      <div class="comp-tags">
+        <span class="comp-tag">SCADA</span>
+        <span class="comp-tag">Dashboards</span>
+        <span class="comp-tag">Tempo Real</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <svg class="comp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      <div class="comp-title">Treinamento e Multiplicação</div>
+      <div class="comp-desc">Condução de treinamentos como multiplicador do sistema Aspen, apoiando equipes na adaptação tecnológica e mudança cultural.</div>
+      <div class="comp-tags">
+        <span class="comp-tag">Change Management</span>
+        <span class="comp-tag">T&D</span>
+        <span class="comp-tag">Capacitação</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <svg class="comp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="3"/><path d="M19.071 4.929a10 10 0 010 14.142M4.929 4.929a10 10 0 000 14.142M15.536 8.464a5 5 0 010 7.072M8.464 8.464a5 5 0 000 7.072"/>
+      </svg>
+      <div class="comp-title">Visão Sistêmica e Integração</div>
+      <div class="comp-desc">Capacidade de conectar áreas distintas — operação, TI, gestão — garantindo estabilidade e eficiência no ecossistema produtivo.</div>
+      <div class="comp-tags">
+        <span class="comp-tag">Integração de Áreas</span>
+        <span class="comp-tag">Gestão Holística</span>
+        <span class="comp-tag">KPIs</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <svg class="comp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+      </svg>
+      <div class="comp-title">Inteligência Artificial para Negócios</div>
+      <div class="comp-desc">Estudo e aplicação de IA generativa, automação de processos e análise preditiva como alavancas de eficiência operacional e competitividade.</div>
+      <div class="comp-tags">
+        <span class="comp-tag">IA Generativa</span>
+        <span class="comp-tag">Automação</span>
+        <span class="comp-tag">Análise Preditiva</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIÊNCIA -->
+<section id="experiencia">
+  <div class="section-tag">Trajetória Profissional</div>
+  <div class="section-title">20 anos de<br>história industrial</div>
+
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-period">
+        <strong>Atual</strong>
+        Recente
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-role">Especialista em Processos e Sistemas</div>
+        <div class="timeline-company">Indústria Química — Cloro-Soda</div>
+        <div class="timeline-desc">
+          Atuação na interface entre tecnologia, operação e gestão, com foco na digitalização de processos e na ampliação da capacidade analítica da planta.
+        </div>
+        <div class="timeline-achievements">
+          <div class="achievement">Implementação do sistema Aspen One, com integração de dados e maior visibilidade operacional</div>
+          <div class="achievement">Desenvolvimento de telas gráficas para monitoramento em tempo real da Planta de Cloro-Soda</div>
+          <div class="achievement">Capacitação de equipes como multiplicador do sistema Aspen, liderando a adoção tecnológica</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal reveal-delay-1">
+      <div class="timeline-period">
+        <strong>Histórico</strong>
+        +15 anos
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-role">Planejamento e Controle de Produção (PCP)</div>
+        <div class="timeline-company">Indústria Química</div>
+        <div class="timeline-desc">
+          Responsável pela gestão integrada do fluxo produtivo, garantindo previsibilidade e continuidade operacional em ambientes industriais críticos.
+        </div>
+        <div class="timeline-achievements">
+          <div class="achievement">Gestão de matérias-primas, insumos e subprodutos em cadeia complexa</div>
+          <div class="achievement">Desenvolvimento de indicadores e rotinas de controle para garantia de segurança operacional</div>
+          <div class="achievement">Integração entre áreas de produção, logística e suprimentos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal reveal-delay-2">
+      <div class="timeline-period">
+        <strong>Início</strong>
+        Base técnica
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-role">Operador de Produção Sênior</div>
+        <div class="timeline-company">Indústria Química</div>
+        <div class="timeline-desc">
+          Ponto de partida de uma trajetória construída do chão de fábrica. A vivência prática nos processos produtivos formou a base de um olhar técnico e sistêmico incomum.
+        </div>
+        <div class="timeline-achievements">
+          <div class="achievement">Operação de processos produtivos de alta complexidade e criticidade</div>
+          <div class="achievement">Participação ativa em projetos de melhoria contínua e otimização de processos</div>
+          <div class="achievement">Desenvolvimento de visão sistêmica a partir da operação</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSIÇÃO -->
+<section id="transicao">
+  <div class="transition-inner">
+    <div class="transition-visual reveal">
+      <div class="bridge">
+        <div class="bridge-lane">
+          <div class="bridge-node active">Engenharia Química</div>
+          <div class="bridge-arrow"></div>
+          <div class="bridge-node target">IA nos Processos</div>
+        </div>
+        <div class="bridge-lane">
+          <div class="bridge-node active">PCP / Operações</div>
+          <div class="bridge-arrow"></div>
+          <div class="bridge-node target">IA Preditiva</div>
+        </div>
+        <div class="bridge-lane">
+          <div class="bridge-node active">Aspen / Sistemas</div>
+          <div class="bridge-arrow"></div>
+          <div class="bridge-node target">AI Tools / Dados</div>
+        </div>
+        <div class="bridge-lane">
+          <div class="bridge-node active">Treinamentos</div>
+          <div class="bridge-arrow"></div>
+          <div class="bridge-node target">Change Management</div>
+        </div>
+        <div class="bridge-lane">
+          <div class="bridge-node active">Visão Sistêmica</div>
+          <div class="bridge-arrow"></div>
+          <div class="bridge-node target">AI Business Strategy</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transition-content reveal reveal-delay-1">
+      <div class="section-tag">Por que IA?</div>
+      <h2 class="section-title">A transição<br>que faz sentido</h2>
+      <p>
+        Cada competência construída ao longo de 20 anos tem um paralelo direto na Inteligência Artificial. Não é uma mudança de carreira — é uma <strong style="color: var(--text)">evolução natural</strong>.
+      </p>
+      <p>
+        Quem conhece os processos de dentro sabe exatamente onde a IA pode intervir para gerar valor real: previsão de demanda, manutenção preditiva, otimização de rotas de produção, automação de relatórios operacionais.
+      </p>
+      <p>
+        Meu objetivo é ser a ponte entre o mundo técnico da IA e o mundo prático dos negócios industriais — falando a língua de ambos.
+      </p>
+
+      <div class="ai-skills">
+        <span class="ai-skill-tag highlight">IA Generativa</span>
+        <span class="ai-skill-tag highlight">Automação de Processos</span>
+        <span class="ai-skill-tag">Análise Preditiva</span>
+        <span class="ai-skill-tag">LLMs para Negócios</span>
+        <span class="ai-skill-tag">Prompt Engineering</span>
+        <span class="ai-skill-tag highlight">Industry 4.0</span>
+        <span class="ai-skill-tag">Machine Learning</span>
+        <span class="ai-skill-tag">AI Strategy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMAÇÃO -->
+<section id="formacao">
+  <div class="section-tag">Formação Acadêmica</div>
+  <div class="section-title">Base multidisciplinar</div>
+
+  <div class="edu-grid">
+    <div class="edu-card reveal" data-index="01">
+      <div class="edu-badge">Graduação</div>
+      <div class="edu-degree">Engenharia Química</div>
+      <div class="edu-institution">Formação de base técnica</div>
+      <div class="edu-desc">
+        Formação técnica robusta que estabeleceu o domínio sobre processos produtivos, termodinâmica, cinética química e sistemas de controle — fundamento de toda a trajetória industrial.
+      </div>
+    </div>
+
+    <div class="edu-card reveal reveal-delay-1" data-index="02">
+      <div class="edu-badge">Pós-Graduação</div>
+      <div class="edu-degree">MBA em Gestão Empresarial</div>
+      <div class="edu-institution">Formação executiva</div>
+      <div class="edu-desc">
+        Complementou a visão técnica com ferramentas de gestão, finanças, estratégia e liderança — habilitando a atuação na interface entre operação e negócios.
+      </div>
+    </div>
+
+    <div class="edu-card reveal reveal-delay-2" data-index="03">
+      <div class="edu-badge">Em desenvolvimento</div>
+      <div class="edu-degree">IA Aplicada aos Negócios</div>
+      <div class="edu-institution">Capacitação contínua</div>
+      <div class="edu-desc">
+        Aprofundamento em Inteligência Artificial generativa, automação de processos de negócio, análise de dados e estratégia de IA — consolidando o pilar tecnológico da transição de carreira.
+      </div>
+    </div>
+
+    <div class="edu-card reveal reveal-delay-3" data-index="04">
+      <div class="edu-badge">Formação prática</div>
+      <div class="edu-degree">Aspen One & Sistemas Industriais</div>
+      <div class="edu-institution">Implementação e Capacitação</div>
+      <div class="edu-desc">
+        Experiência prática aprofundada na implementação e operação de sistemas de gestão industrial, com certificação implícita pelo resultado — planta otimizada, equipes capacitadas.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contact-inner">
+    <div class="section-tag" style="justify-content: center;">Contato</div>
+    <h2 class="section-title">Vamos conversar?</h2>
+    <p class="contact-sub">
+      Estou disponível para projetos, consultorias, posições CLT ou parcerias. Se você acredita que a IA pode transformar sua operação — e precisa de alguém que entenda os dois mundos — entre em contato.
+    </p>
+
+    <div class="contact-grid">
+      <a href="mailto:frederico.galvao@email.com" class="contact-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        frederico.galvao@email.com
+      </a>
+
+      <a href="https://www.linkedin.com/in/fragom/" target="_blank" class="contact-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>
+        </svg>
+        LinkedIn — /in/fragom
+      </a>
+
+      <a href="tel:+5513999999999" class="contact-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+        </svg>
+        Santos, SP — Brasil
+      </a>
+    </div>
+
+    <div class="availability">
+      Disponível para oportunidades em IA e Tecnologia
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">
+    © 2025 <span>Frederico Galvão</span> — Todos os direitos reservados
+  </div>
+  <div class="footer-links">
+    <a href="#hero">Topo</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#contato">Contato</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateCursor() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top = ringY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  document.querySelectorAll('a, button, .comp-card, .orbit-node').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
+      cursor.style.borderColor = 'var(--accent2)';
+      cursorRing.style.width = '60px';
+      cursorRing.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      cursor.style.borderColor = 'var(--accent)';
+      cursorRing.style.width = '36px';
+      cursorRing.style.height = '36px';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
